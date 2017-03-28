@@ -1,9 +1,10 @@
-import React from 'react';
+ import React from 'react';
+ import ReactDOM from 'react-dom';
 //import YeomanImage from './YeomanImage';
-import ControllerUnit from './ControllerUnit'
-import ImgFigure from './ImgFigure'
-import 'normalize.css/normalize.css'
-import './app.scss'
+import ControllerUnit from './ControllerUnit';
+import ImgFigure from './ImgFigure';
+import 'normalize.css/normalize.css';
+import './app.scss';
 
 /**
  * 获取区间内的一个随机数
@@ -35,6 +36,75 @@ let imgsArrDatas = ((imgsJsonDatas) => {
 })(imgsJsonDatas)
 
 class AppComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    // 位置排布点(先设置0，0)
+  	this.Constant = {
+  		centerPos: {
+  			left: 0,
+  			right: 0
+  		},
+  		// 水平方向取值范围
+  		hPosRange: {
+  			leftSecX: [0,0], // 左分区x取值
+  			rightSecX: [0,0], // 右分区y取值
+  			y: [0,0] // 左右y范围相同，故简写y
+  		},
+  		// 竖直方向取值范围
+  		vPosRange: {
+  			x: [0,0], // x取值
+  			topY: [0,0] // y取值
+  		}
+  	}
+  }
+
+
+  //组件加载后，计算每张图片其可以放置的范围
+  componentDidMount() {
+    // 舞台大小
+    let stageDOM = ReactDOM.findDOMNode(this.refs.stage),
+        stageW = stageDOM.scrollWidth, // 舞台宽度
+        stageH = stageDOM.scrollHeight, // 舞台高度
+        halfStageW = Math.floor(stageW / 2),
+        halfStageH = Math.floor(stageH / 2);
+
+    // imgFigure组件的大小
+		let ImgFigureDOM = ReactDOM.findDOMNode(this.refs.imgFigure0), // 相同大小，取一个即可
+  			imgW = ImgFigureDOM.scrollWidth, // img组件宽度
+  			imgH = ImgFigureDOM.scrollHeight, // img组件高度
+  			halfImgW = Math.floor(imgW / 2),
+  			halfImgH = Math.floor(imgH / 2);
+
+    // 计算中心图片位置
+		this.Constant.centerPos = {
+			left: halfStageW - halfImgW,
+			top: halfStageH - halfImgH
+		};
+
+    // 水平左选区范围X
+    this.Constant.hPosRange.leftSecX[0] = -halfImgW;
+		this.Constant.hPosRange.leftSecX[1] = halfStageW - halfImgW * 3;
+		// 水平右选区范围X
+		this.Constant.hPosRange.rightSecX[0] = halfStageW + halfImgW;
+		this.Constant.hPosRange.rightSecX[1] = stageW - halfImgW;
+
+		// 水平左右选区Y
+		this.Constant.hPosRange.y[0] = -halfImgH;
+		this.Constant.hPosRange.y[1] = stageH - halfImgH;
+
+		// 垂直选区X
+		this.Constant.vPosRange.x[0] = halfStageW - imgW;
+		this.Constant.vPosRange.x[1] = halfStageW;
+		// 垂直选区Y
+		this.Constant.vPosRange.topY[0] = -halfImgH;
+		this.Constant.vPosRange.topY[1] = halfStageH - halfImgH * 3;
+
+    // 执行排布 默认第一张图片
+		//this.rearrange(0);
+		// 调用 arrange action
+  }
+
+
 
   render() {
     // 存放 image 和 controller
@@ -45,7 +115,7 @@ class AppComponent extends React.Component {
     imgsArrDatas.map((value, index) => {
       // 插入imgFigures数组中
       imgFigures.push(
-        <ImgFigure key={index} data={value} />
+        <ImgFigure key={index} data={value} ref={'imgFigure' + index} />
       );
       // 插入controllerUnits数组中
       controllerUnits.push(
