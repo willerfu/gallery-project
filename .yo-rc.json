@@ -1,0 +1,9 @@
+{
+  "generator-react-webpack": {
+    "appName": "gallery-project",
+    "style": "scss",
+    "cssmodules": false,
+    "postcss": true,
+    "generatedWithVersion": 4
+  }
+}

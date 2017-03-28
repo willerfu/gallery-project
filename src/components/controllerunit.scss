@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "icons-turn-arrow";
+  src: 
+    url("../fonts/icons/turn-arrow.woff") format("woff"),
+    url("../fonts/icons/turn-arrow.svg") format("svg");
+}
+
+.controller-unit {
+  display: inline-block;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  background-color: #aaa;
+  transform: scale(.5);
+  /*transition: transform 0.6s ease-in-out, bg*/
+
+  &.is-center {
+    background-color: #888;
+    transform: scale(1);
+  }
+  &::after {
+    color: #fff;
+    font-family: "icons-turn-arrow";
+    font-size: 80%;
+    line-height: 2.25;
+    content: "\e600";
+  }
+  &.icon-inverse {
+    background-color: #555;
+    transform: rotateY(180deg);
+  }
+}
