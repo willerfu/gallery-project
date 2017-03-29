@@ -36,6 +36,13 @@ let imgsArrDatas = ((imgsJsonDatas) => {
 
 class AppComponent extends React.Component {
 
+  // 点击添加事件
+  handleClick(e) {
+    let text = '哈哈哈哈';
+    this.props.actions.inverse(text);
+    //console.log("text内容：" + this.props.imgs.text);
+  }
+
   render() {
     // 存放 image 和 controller
     let imgFigures = [],
@@ -55,6 +62,11 @@ class AppComponent extends React.Component {
 
     return (
       <section className='stage' ref='stage' >
+        <button onClick={(e) => {
+            this.handleClick(e);
+            e.preventDefault();
+        }}>点击我</button>
+        <span>{this.props.imgs.text}</span>
         <section className='img-sec'>
           {imgFigures}
         </section>
