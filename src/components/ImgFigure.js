@@ -4,19 +4,23 @@ import './imgfigure.scss';
 class ImgFigure extends React.Component {
 
   handleClick(event) {
-    // 翻转
-    this.props.onInverse(this.props.id);
+    // 判断点击的图片是否居中显示
+		if (this.props.arrange.isCenter) {
+      // 翻转
+      this.props.onInverse(this.props.id);
+    } else {
+       // 居中
+      this.props.onCenter(this.props.id);
+    }
     // 阻止默认事件
     event.preventDefault();
-
-
+    event.stopPropagation();
   }
 
   render() {
     // 样式位置
     let styleObj = {};
     // 如果props属性中指定了这张图片的位置，则使用
-    console.log(this.props.arrange);
 		if (this.props.arrange.pos) {
 			styleObj = {
 				left: this.props.arrange.pos.left + 'px',

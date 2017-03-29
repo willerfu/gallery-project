@@ -6,7 +6,7 @@
 import { INVERSE, ARRANGE } from '../actions/const';
 import { imgsArrDatas } from '../sources/funs'
 
-
+// 初始化state
 let imgsArr = [];
 for(let i = 0, j = imgsArrDatas.length; i < j; i++) {
   imgsArr[i] = {
@@ -16,7 +16,6 @@ for(let i = 0, j = imgsArrDatas.length; i < j; i++) {
     isCenter: false
   }
 }
-// 初始化state
 const initialState = { imgsArr: imgsArr };
 
 function reducer(state = initialState, action) {
@@ -26,20 +25,7 @@ function reducer(state = initialState, action) {
   switch (action.type) {
     // 排列 action
     case ARRANGE: {
-
-      return Object.assign({}, state, {
-        imgsArr: state.imgsArr.map((img, index) => {
-          if (index === action.centerIndex) {
-            return Object.assign({}, img, {
-              pos: action.centerPos,
-              rotate: 0, // 居中图片不需要旋转
-              isInverse: false,
-              isCenter: true
-            });
-          }
-          return img;
-        })
-      })
+      return Object.assign({}, state, { imgsArr: action.imgsArrangeArr })
     }
     // 翻转 action
     case INVERSE: {
