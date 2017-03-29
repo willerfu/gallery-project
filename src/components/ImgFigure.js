@@ -11,9 +11,9 @@ class ImgFigure extends React.Component {
       <figure className={imgFigureClassName}>
         <img src={this.props.data.imgUrl} alt={this.props.data.fileName} />
         <figcaption>
-          <h2 className='img-title'>{this.props.title}</h2>
+          <h2 className='img-title'>{this.props.data.title}</h2>
           <div className='img-back'>
-            <p>{this.props.desc}</p>
+            <p>{this.props.data.desc}</p>
           </div>
         </figcaption>
       </figure>
