@@ -1,7 +1,7 @@
 import { INVERSE } from './const';
 
-function action(text) {
-  return { type: INVERSE, text };
+function action(index) {
+  return { type: INVERSE, index };
 }
 
 module.exports = action;

@@ -10,7 +10,10 @@ import React, {
 } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { inverse } from '../actions/';
+import {
+  inverse,
+  arrange
+} from '../actions/';
 import Main from '../components/App';
 /* Populated by react-webpack-redux:reducer */
 class App extends Component {
@@ -25,7 +28,10 @@ class App extends Component {
  *       adjust it here.
  */
 App.propTypes = {
-  actions: PropTypes.shape({ inverse: PropTypes.func.isRequired }),
+  actions: PropTypes.shape({
+    inverse: PropTypes.func.isRequired,
+    arrange: PropTypes.func.isRequired
+  }),
   imgs: PropTypes.shape({})
 };
 function mapStateToProps(state) {
@@ -36,7 +42,10 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   /* Populated by react-webpack-redux:action */
-  const actions = { inverse };
+  const actions = {
+    inverse,
+    arrange
+  };
   const actionMap = { actions: bindActionCreators(actions, dispatch) };
   return actionMap;
 }

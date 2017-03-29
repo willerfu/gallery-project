@@ -3,37 +3,9 @@
 //import YeomanImage from './YeomanImage';
 import ControllerUnit from './ControllerUnit';
 import ImgFigure from './ImgFigure';
+import { getRangeRandom, get30DegRandom, imgsArrDatas } from '../sources/funs';
 import 'normalize.css/normalize.css';
 import './app.scss';
-
-/**
- * 获取区间内的一个随机数
- */
-const getRangeRandom = (low, high) =>
-  Math.floor(Math.random() * (high - low) + low);
-
-  /*
-   * 获取 0~30° 之间的一个任意正负值
-   */
-const get30DegRandom = () =>
-  ((Math.random() > 0.5 ? '' : '-') + Math.floor(Math.random() * 30));
-
-// 获取图片json数据
-let imgsJsonDatas = require('../data/imageDatas.json');
-
-// 暴露图片数据
-let imgsArrDatas = ((imgsJsonDatas) => {
-	for (let i = 0, j = imgsJsonDatas.length; i < j; i++) {
-		// 单张图片数据
-		let singleImgsData = imgsJsonDatas[i];
-		// 添加新属性 imageUrl 存放图片路径信息
-		singleImgsData.imgUrl = require('../images/' + singleImgsData.fileName);
-		// 更新图片数据
-		imgsJsonDatas[i] = singleImgsData;
-	}
-  // 返回更新后的图片数据
-  return imgsJsonDatas;
-})(imgsJsonDatas)
 
 class AppComponent extends React.Component {
   constructor(props) {
@@ -58,6 +30,34 @@ class AppComponent extends React.Component {
   	}
   }
 
+  // 重新排布
+  rearrange(centerIndex) {
+    let imgsArrangeArr = this.props.imgs.imgsArr,
+   			Constant = this.Constant,
+   			centerPos = Constant.centerPos,
+   			hPosRange = Constant.hPosRange,
+   			vPosRange = Constant.vPosRange,
+   			hPosRangeLeftSecX =  hPosRange.leftSecX, // 水平左区x
+   			hPosRangeRightSecX = hPosRange.rightSecX, // 水平右区x
+   			hPosRangeY = hPosRange.y, // 水平y
+   			vPosRangeX = vPosRange.x,
+   			vPosRangeTopY = vPosRange.topY,
+
+        // 放置在上方的图片
+   			imgsArrangeTopArr = [],
+   			topImgNum = Math.floor(Math.random() * 2), // 取1个或者0个
+
+   			topImgSpliceIndex = 0,
+   			// 放置在中心的图片
+   			imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex,1);
+
+    // 居中 centerIndex 的图片
+    this.props.actions.arrange(centerIndex,centerPos);
+
+    // 取出要布局上侧的图片状态信息
+		topImgSpliceIndex = Math.floor(Math.random() * (imgsArrangeArr.length - topImgNum));
+		imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIndex,topImgNum);
+  }
 
   //组件加载后，计算每张图片其可以放置的范围
   componentDidMount() {
@@ -100,17 +100,8 @@ class AppComponent extends React.Component {
 		this.Constant.vPosRange.topY[1] = halfStageH - halfImgH * 3;
 
     // 执行排布 默认第一张图片
-		//this.rearrange(0);
+		this.rearrange(0);
 		// 调用 arrange action
-  }
-
-
-
-  // 点击添加事件
-  handleClick(e) {
-    let text = '哈哈哈哈';
-    this.props.actions.inverse(text);
-    //console.log("text内容：" + this.props.imgs.text);
   }
 
   render() {
@@ -122,7 +113,13 @@ class AppComponent extends React.Component {
     imgsArrDatas.map((value, index) => {
       // 插入imgFigures数组中
       imgFigures.push(
-        <ImgFigure key={index} data={value} ref={'imgFigure' + index} />
+        <ImgFigure key={index}
+          id={index}
+          arrange={this.props.imgs.imgsArr[index]}
+          data={value}
+          ref={'imgFigure' + index}
+          onInverse={index => this.props.actions.inverse(index)}
+        />
       );
       // 插入controllerUnits数组中
       controllerUnits.push(
@@ -132,11 +129,6 @@ class AppComponent extends React.Component {
 
     return (
       <section className='stage' ref='stage' >
-        <button onClick={(e) => {
-            this.handleClick(e);
-            e.preventDefault();
-        }}>点击我</button>
-        <span>{this.props.imgs.text}</span>
         <section className='img-sec'>
           {imgFigures}
         </section>

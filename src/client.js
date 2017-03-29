@@ -6,7 +6,6 @@ import App from './containers/App';
 import configureStore from './stores';
 
 const store = configureStore();
-console.log(store);
 ReactDOM.render(
   <AppContainer>
     <Provider store={store}>

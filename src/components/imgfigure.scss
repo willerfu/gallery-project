@@ -8,6 +8,12 @@
   background-color: #fff;
   box-sizing: border-box;
   cursor: pointer;
+
+  transform-origin: 0 50% 0; // 更改变形的原点位置 (0,50%,0)
+  transform-style: preserve-3d; // 子元素将保留3d位置
+  transition: left .6s ease-in-out,
+              top .6s ease-in-out,
+              transform .6s ease-in-out;
   /* 翻转 */
   &.is-inverse {
     transform: translate(320px) rotateY(180deg);
@@ -31,10 +37,13 @@ figcaption {
     padding: 50px 40px;
     overflow: auto;
     color: #a7a0a2;
+    font-size: 1.3rem;
+    line-height: 1.5;
     text-align: center;
-    //background-color: #fff;
+    background-color: #f3f3f3;
     box-sizing: border-box;
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) translateZ(1px);
+    backface-visibility: hidden; // 旋转到背面隐藏
   }
   p {
     margin: 0;
